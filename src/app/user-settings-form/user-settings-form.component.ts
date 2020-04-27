@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserSettings } from '../data/user-settings';
 import { NgForm } from '@angular/forms';
+import { DataService } from '../data/data.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-settings-form',
@@ -18,13 +20,34 @@ export class UserSettingsFormComponent implements OnInit {
   }
 
   userSettings: UserSettings = {...this.originalUserSettings}
+  postError : boolean = false;
+  postErrorMessage = '';
+  // subscriptionType = ['one', 'two', 'three'];
+  subscriptionType : Observable<string[]>;
 
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.subscriptionType = this.dataService.getSubscriptionTypes();
+  }
+
+  onHttpError(error: any){
+    console.log('error ', error);
+    this.postError = true;
+    this.postErrorMessage = 'An error occured in the network';
   }
 
   onSubmit(form: NgForm){
     console.log('in onsubmmit ', form.valid);
+
+    if(form.valid){
+      this.dataService.postUserSettingsForm(this.userSettings).subscribe(
+        result => console.log("Logging out the result: ", result),
+        error => this.onHttpError(error)
+      );
+    }else{
+      this.postError = true;
+      this.postErrorMessage = 'Some important fields has been left unattended to';
+    }
   }
 }

@@ -15,8 +15,14 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
+  getSubscriptionTypes(): Observable<string[]>{
+    return of(['Monthly', 'Annually', 'Lifetime']);
+  }
+
   postUserSettingsForm(userSettings: UserSettings) : Observable <any>{
     return this.http.post('http://localhost/living-stone/ps-form-demo.php', userSettings);
     // return of(userSettings)
   }
+
+
 }
