@@ -2,12 +2,17 @@
 <div class="container">
     <h2>User Seetings</h2>
 
-    <form #form="ngForm">
+    <form #form="ngForm" ngNativeValidate>
         <div class="form-group">
             <label for="name">
                 Name
             </label>
-            <input id="name" class="form-control" name="name" [(ngModel)]="userSettings.name" >
+            <input id="name" class="form-control" name="name" [(ngModel)]="userSettings.name"
+                #nameField="ngModel" required >
+        </div>
+
+        <div [hidden]="nameField.valid || nameField.untouched" class="alert alert-danger"> 
+            Please enter the name.
         </div>
 
         <div class="form-check form-group">
