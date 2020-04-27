@@ -2,16 +2,16 @@
 <div class="container">
     <h2>User Seetings</h2>
 
-    <form #form="ngForm" ngNativeValidate>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
         <div class="form-group">
             <label for="name">
                 Name
             </label>
             <input id="name" class="form-control" name="name" [(ngModel)]="userSettings.name"
-                #nameField="ngModel" required >
+                #nameField="ngModel" [class.field-error]="form.submitted && nameField.invalid" required >
         </div>
 
-        <div [hidden]="nameField.valid || nameField.untouched" class="alert alert-danger"> 
+        <div [hidden]="!form.submiited || nameField.invalid" class="alert alert-danger"> 
             Please enter the name.
         </div>
 
@@ -65,7 +65,7 @@
             <textarea name="notes" id="notes" class="form-control" rows="3" [(ngModel)]="userSettings.notes"></textarea>
         </div>
 
-        <button type="button" class="btn btn-primary"> Send </button>
+        <button class="btn btn-primary"> Send </button>
 
     </form>
 </div>
